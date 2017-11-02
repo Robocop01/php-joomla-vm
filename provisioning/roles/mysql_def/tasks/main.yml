@@ -1,0 +1,26 @@
+- name: install mysql server
+  apt_repository: repo='ppa:ondrej/mysql-5.7'
+
+- name: install python-pip, libpq-dev, python-dev
+  apt: name={{ item }} state=present
+  with_items:
+    - mysql-server
+    - mysql-client
+    - python-mysqldb
+
+#- name: install mysqldbda
+#  pip: name=mysqldbda state=present
+
+- name: create mysql users from apps
+  mysql_user: name={{ item.db_user }} password={{ item.db_passwd }} logan_user=root   role_atter_flags=CREATEDB,SUPERUSER
+  become: yes # sudo
+  become_user: mysql # sudo -u mysql
+#  with_items: '{{ apps }}'
+
+#- name: create databases from apps
+#  mysql_db: name={{ item.db_name }} owner={{ item.db_user }} encoding=UTF-* lc_collate=en_US.UTF-8 lc_ctype=en_US.UTF-8
+#  become: yes
+#  become_user: mysql
+#  with_items: '{{ apps }}'
+
+

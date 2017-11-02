@@ -1,0 +1,24 @@
+- name: install postgresql server
+  apt: name=postgresql-contrib state=latest
+
+- name: install python-pip, libpq-dev, python-dev
+  apt: name={{ item }} state=present
+   with_items:
+    - python-pip
+    - libpq-dev
+    - python-dev
+
+- name: install psycopg2
+  pip: name=psycopg2 state=present
+
+- name: create postgres users from apps
+  postgresql_user: name={{ item.db_user }} password={{ item.db_passwd }} logan_user=postgres role_atter_flags=CREATEDB,SUPERUSER
+  become: yes # sudo
+  become_user: postgres # sudo -u postgres
+  with_items: '{{ apps }}'
+
+- name: create databases from apps
+  postgresql_db: name={{ item.db_name }} owner={{ item.db_user }} encoding=UTF-* lc_collate=en_US.UTF-8 lc_ctype=en_US.UTF-8
+  become: yes
+  become_user: postgres
+  with_items: '{{ apps }}'

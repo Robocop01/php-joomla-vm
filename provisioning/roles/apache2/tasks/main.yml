@@ -1,0 +1,19 @@
+- name: add apache2 ppa
+  apt_repository: repo='ppa:ondrej/apache2'
+
+- name: install apache2
+  apt: name=apache2 state=present update_cache=yes
+
+- name: run apache2 with vagrant user
+  lineinfile: dest=/etc/apache2/apache2.conf regexp='^user' line='user vagrant;'
+
+#- name : render apache2 sites
+#  template: src=server.j2 dest=/etc/apache2/sites-enabled/{{ item.domain }}.conf
+#  with_items: '{{ apps }}'
+#  notify: restart apache2
+
+#- name: disable default site
+#  file: path=/etc/apache2/sites-enabled/default state=absent
+#  notify: restart apache2
+
+

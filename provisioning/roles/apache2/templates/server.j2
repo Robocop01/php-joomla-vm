@@ -1,0 +1,39 @@
+ server {
+     server_name {{ item.domain }};  
+#     {% if item.type == "joomla" %} 
+#     root /vagrant/{{ item.name }}/web/;
+#     {% else %}
+      root /vagrant/;
+#     {% endif %}
+   
+
+     location / {
+          index index.php index.html index.htm;
+#         {% if item.type =="joomla" %}
+#         try_files $uri /app_dev.php?$is_args$args;
+#         {% else %}
+          try_files $uri $uri/ /index.php?$args;
+#         {% endif %}
+        }
+
+
+#       {% if item.type == "joomla" %}
+#       location ~ ^/(app_dev|cofig)\.php(/|$) {
+#       {% else %}
+        location ~ \.php$ {
+#       {% endif %}
+         try_files $uri =404;
+         fastcgi_split_path_info ^(.+\.php)(/.+)$;
+         fastcgi_index index.php;
+         fastcgi_pass unix:/run/php/php-{{ item.name }}-fpm.sock;
+         fast_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+         include fastcgi_params;
+      }    
+
+     location ~ \.php$ {
+      return 404;
+     }
+ 
+     error_log /var/log/nginx/{{ item.name }}_error.log;
+     acceess_log /var/log/nginx/{{ item.name }}_access.log;
+}

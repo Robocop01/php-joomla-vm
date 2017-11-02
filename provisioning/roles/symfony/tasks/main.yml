@@ -1,0 +1,5 @@
+1 - name: get the symfony installer
+2   raw: curl -LsS https://symfony.com/installer -o /usr/local/bin/symfony
+3
+4 - name: make the installer executable
+5   file: path=/usr/local/bin/symfony mode=0755

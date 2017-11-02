@@ -1,0 +1,17 @@
+locale: en_US.UTF-8
+
+php: 
+     version: 7.1
+
+mysql:
+     version: 5.7
+
+apps:
+- name: joomla
+  user: vagrant
+  group: vagrant
+  domain: joomla.dev
+  db_name: joomla
+  db_user: joomla
+  db_passwd: secret
+  type: joomla

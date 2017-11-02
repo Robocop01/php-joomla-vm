@@ -1,0 +1,56 @@
+- name: Install the MySQL packages
+  apt: name={{ item }} state=installed update_cache=yes
+  with_items:
+     - mysql-server
+     - mysql-client
+     - python-mysqldb
+
+#- name: Create mysql users from mysql
+#  mysql_user: logan_user=root login_password=root update_password=secret 
+
+
+- name: Ensure default user is present.
+  mysql_user:
+    name: "joomla"
+    host: 'localhost'
+    password: "secret"
+    priv: '*.*:ALL,GRANT'
+    state: present
+
+#  mysql_user: name={{ item.db_user }} login_user=root login_password=root
+  
+#mysql_user: name=bob password=12345 priv='*.*:ALL'
+
+#  mysql_user: name={{ item.db_name }} login_user=root login_password=root  password=root1
+# state=present
+#  mysql_user: name={{ item.db_name }} login_user=root login_password={{ item.db_passwd }} #state=present
+  become: yes # sudo
+  become_user: root # sudo -u mysql
+  with_items: '{{ apps }}'
+  ignore_errors: yes
+
+#- name: Add user
+#  mysql_user: name=joomla host=localhost password=joomla priv='*.*:ALL' state=present
+#  ignore_errors: yes
+
+#- name: Create database user with all database privileges
+#  mysql_user:
+#    name: bob
+#    password: 12345
+#    priv: '*.*:ALL'
+#    state: present
+
+#- name: Create a new database with name 'joomla'
+#  mysql_db:
+#    name: '{{ item.db_name }}'
+#    state: present
+
+#- name: Copy the root credentials as .my.cnf file
+#  template: src=root.cnf.j2 dest=~/.my.cnf mode=0600
+
+#- name: create databases from apps
+#  mysql_db: name={{ item.db_name }} login_user={{ item.db_user }}
+#  become: yes
+#  become_user: mysql
+#  with_items: '{{ apps }}'
+

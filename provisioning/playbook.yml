@@ -1,0 +1,14 @@
+---
+
+- hosts: all
+  become: true
+  roles:
+    - general
+    - php
+    - php-fpm
+    - composer
+    - nginx
+#    - apache2
+    - mysql
+#   - postgresql
+
